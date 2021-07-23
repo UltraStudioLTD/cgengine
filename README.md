@@ -1,6 +1,5 @@
 # cgengine
-console game engine base with simple support for rectangle rendering and collision
-###
+console game engine base with simple support for rectangle rendering and collision - may not work on some operating systems
 
 # setup
 1. install the keyboard module using ```pip install keyboard``` in your command line
