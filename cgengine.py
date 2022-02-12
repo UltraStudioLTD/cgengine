@@ -31,10 +31,7 @@ def printsl(text):
     print(text, end = '')
 
 def isKeyPressed(keyCode):
-    if (is_pressed(keyCode)):
-        return True
-
-    return False
+    return bool((is_pressed(keyCode)))
 
 def sleeps(seconds):
     time.sleep(seconds)
@@ -56,11 +53,9 @@ class RenderRect:
         self.outlineChar = char
 
     def isPointWithin(self, point):
-        if (point.x >= self.topLeft.x and point.x <= self.bottomRight.x):
-            if (point.y >= self.topLeft.y and point.y <= self.bottomRight.y):
-                return True
-
-        return False
+        return (point.x >= self.topLeft.x and point.x <= self.bottomRight.x) and (
+            point.y >= self.topLeft.y and point.y <= self.bottomRight.y
+        )
 
     def setOutlineChar(self, outlineChar):
         self.outlineChar = outlineChar
@@ -71,11 +66,13 @@ class ColliderRect:
         self.bottomRight = bottomRight
 
     def isCollidingWith(self, other):
-        if (self.bottomRight.x >= other.topLeft.x and self.topLeft.x <= other.bottomRight.x):
-            if (self.bottomRight.y >= other.topLeft.y and self.topLeft.y <= other.bottomRight.y):
-                return True
-
-        return False
+        return (
+            self.bottomRight.x >= other.topLeft.x
+            and self.topLeft.x <= other.bottomRight.x
+        ) and (
+            self.bottomRight.y >= other.topLeft.y
+            and self.topLeft.y <= other.bottomRight.y
+        )
 
 # game infrastructure
 class Game:
@@ -123,10 +120,10 @@ class DrawManager:
                     if (rect.isPointWithin(Vec2(x, y))):
                         cChar = rect.char
 
-                        if (x == rect.topLeft.x or x == rect.bottomRight.x):
+                        if x in [rect.topLeft.x, rect.bottomRight.x]:
                             cChar = rect.outlineChar
 
-                        if (y == rect.topLeft.y or y == rect.bottomRight.y):
+                        if y in [rect.topLeft.y, rect.bottomRight.y]:
                             cChar = rect.outlineChar
 
                 printsl(cChar)
