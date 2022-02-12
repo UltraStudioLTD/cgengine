@@ -1,49 +1,20 @@
-#   MIT License
-#
-#   Copyright (c) 2021 tirimid
-#
-#   Permission is hereby granted, free of charge, to any person obtaining a copy
-#   of this software and associated documentation files (the "Software"), to deal
-#   in the Software without restriction, including without limitation the rights
-#   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-#   copies of the Software, and to permit persons to whom the Software is
-#   furnished to do so, subject to the following conditions:
-#
-#   The above copyright notice and this permission notice shall be included in all
-#   copies or substantial portions of the Software.
-#
-#   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-#   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-#   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-#   AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-#   LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-#   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-#   SOFTWARE.
-
 import random
-import time
-import os
+from time import sleep
+from sys import stdin, stdout
 
-from keyboard import is_pressed
+try:
+    from msvcrt import getch, khbit
+except:
+    from termios import 
+    def getch(echo: bool = False) -> str:
+        
 
-# helper functions
-def printsl(text):
-    print(text, end = '')
+class Vector:
+    def __init__(self, x, y) -> None:
+        self.X = x
+        self.Y = y
+        self.Z = z
 
-def isKeyPressed(keyCode):
-    return bool((is_pressed(keyCode)))
-
-def sleeps(seconds):
-    time.sleep(seconds)
-
-def clearScreen():
-    os.system("cls")
-
-# types
-class Vec2:
-    def __init__(self, x, y):
-        self.x = x
-        self.y = y
 
 class RenderRect:
     def __init__(self, topLeft, bottomRight, char):
@@ -53,12 +24,13 @@ class RenderRect:
         self.outlineChar = char
 
     def isPointWithin(self, point):
-        return (point.x >= self.topLeft.x and point.x <= self.bottomRight.x) and (
-            point.y >= self.topLeft.y and point.y <= self.bottomRight.y
+        return (point.X >= self.topLeft.X and point.X <= self.bottomRight.X) and (
+            point.Y >= self.topLeft.Y and point.Y <= self.bottomRight.Y
         )
 
     def setOutlineChar(self, outlineChar):
         self.outlineChar = outlineChar
+
 
 class ColliderRect:
     def __init__(self, topLeft, bottomRight):
@@ -67,12 +39,13 @@ class ColliderRect:
 
     def isCollidingWith(self, other):
         return (
-            self.bottomRight.x >= other.topLeft.x
-            and self.topLeft.x <= other.bottomRight.x
+            self.bottomRight.X >= other.topLeft.X
+            and self.topLeft.X <= other.bottomRight.X
         ) and (
-            self.bottomRight.y >= other.topLeft.y
-            and self.topLeft.y <= other.bottomRight.y
+            self.bottomRight.Y >= other.topLeft.Y
+            and self.topLeft.Y <= other.bottomRight.Y
         )
+
 
 # game infrastructure
 class Game:
@@ -82,12 +55,14 @@ class Game:
     def update(self):
         self.gameMan.update()
 
+
 class GameManager:
     def __init__(self, drawMan):
         self.drawMan = drawMan
 
     def update(self):
         self.drawMan.present()
+
 
 class DrawManager:
     def __init__(self, width, height, bgChar):
@@ -110,32 +85,32 @@ class DrawManager:
         countX = 0
         countY = 0
 
-        cChar = ''
+        cChar = ""
 
         for y in range(self.height):
             for x in range(self.width):
                 cChar = self.bgChar
 
                 for rect in self.rects:
-                    if (rect.isPointWithin(Vec2(x, y))):
+                    if rect.isPointWithin(Vector(x, y)):
                         cChar = rect.char
 
-                        if x in [rect.topLeft.x, rect.bottomRight.x]:
+                        if x in [rect.topLeft.X, rect.bottomRight.X]:
                             cChar = rect.outlineChar
 
-                        if y in [rect.topLeft.y, rect.bottomRight.y]:
+                        if y in [rect.topLeft.Y, rect.bottomRight.Y]:
                             cChar = rect.outlineChar
 
                 printsl(cChar)
 
                 countX += 1
 
-                if (countX >= self.width):
+                if countX >= self.width:
                     countX = 0
-                    printsl('\n')
+                    printsl("\n")
 
             countY += 1
 
-            if (countY >= self.height):
+            if countY >= self.height:
                 countY = 0
-                printsl('\n')
+                printsl("\n")
